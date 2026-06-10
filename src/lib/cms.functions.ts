@@ -16,13 +16,14 @@ export type Advantage = { id: string; icon: string; title: string; description: 
 export type PaymentMethod = { id: string; icon: string; title: string; description: string; badge: string | null; sort_order: number; is_active: boolean };
 export type GalleryItem = { id: string; image_url: string; caption: string | null; sort_order: number; is_active: boolean };
 
+type JsonValue = string | number | boolean | null | JsonValue[] | { [k: string]: JsonValue };
 export type CmsContent = {
   packages: Pkg[];
   faqs: Faq[];
   advantages: Advantage[];
   payment_methods: PaymentMethod[];
   gallery: GalleryItem[];
-  settings: Record<string, unknown>;
+  settings: Record<string, JsonValue>;
 };
 
 export const getCmsContent = createServerFn({ method: "GET" }).handler(async (): Promise<CmsContent> => {
@@ -37,8 +38,8 @@ export const getCmsContent = createServerFn({ method: "GET" }).handler(async ():
     supabaseAdmin.from("site_settings").select("*"),
   ]);
 
-  const settings: Record<string, unknown> = {};
-  for (const row of set.data ?? []) settings[row.key] = row.value;
+  const settings: Record<string, JsonValue> = {};
+  for (const row of set.data ?? []) settings[row.key] = row.value as JsonValue;
 
   return {
     packages: (pkgs.data ?? []) as Pkg[],
