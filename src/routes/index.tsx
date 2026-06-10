@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import kaabaHero from "@/assets/kaaba-hero.jpg";
 import madinah from "@/assets/madinah.jpg";
 import jamaah from "@/assets/jamaah.jpg";
+import logoAsset from "@/assets/sultan-haramain-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -85,9 +86,7 @@ function Index() {
       >
         <div className="mx-auto max-w-7xl px-6 h-20 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3">
-            <div className="size-10 rounded-full bg-gradient-gold grid place-items-center text-primary-foreground font-bold shadow-gold">
-              ☪
-            </div>
+            <img src={logoAsset.url} alt="Sultan Haramain logo" className="h-11 w-auto drop-shadow-[0_4px_12px_rgba(201,168,76,0.4)]" />
             <div className="leading-tight">
               <div className="text-lg text-gradient-gold font-semibold">Sultan Barokah</div>
               <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Haramain · Gresik</div>
@@ -507,7 +506,7 @@ function Index() {
       <footer className="border-t border-border py-12 mt-10">
         <div className="mx-auto max-w-7xl px-6 grid md:grid-cols-3 gap-8 items-center">
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-full bg-gradient-gold grid place-items-center text-primary-foreground font-bold">☪</div>
+            <img src={logoAsset.url} alt="Sultan Haramain logo" className="h-11 w-auto" />
             <div>
               <div className="text-gradient-gold font-semibold">PT Sultan Barokah Haramain</div>
               <div className="text-xs text-muted-foreground">Penyelenggara Umroh & Haji Resmi</div>
