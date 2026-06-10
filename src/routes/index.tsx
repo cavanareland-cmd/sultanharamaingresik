@@ -1,9 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import kaabaHero from "@/assets/kaaba-hero.jpg";
 import madinah from "@/assets/madinah.jpg";
 import jamaah from "@/assets/jamaah.jpg";
 import logoAsset from "@/assets/sultan-haramain-logo.png.asset.json";
+import { getCmsContent } from "@/lib/cms.functions";
+
+const cmsQuery = queryOptions({ queryKey: ["cms"], queryFn: () => getCmsContent() });
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -14,10 +18,14 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Langkah mudah menuju Baitullah. Cash, tabungan, atau cicilan tanpa jaminan." },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(cmsQuery),
+  errorComponent: ({ error }) => <div className="min-h-screen grid place-items-center text-muted-foreground">{error.message}</div>,
+  notFoundComponent: () => <div className="min-h-screen grid place-items-center">Not found</div>,
   component: Index,
 });
 
 function Index() {
+  const { data: cms } = useSuspenseQuery(cmsQuery);
   const [scrolled, setScrolled] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -36,46 +44,16 @@ function Index() {
     { href: "#kontak", label: "Kontak" },
   ];
 
-  const paket = [
-    {
-      tag: "Umroh Reguler",
-      title: "Umroh 9 Hari",
-      price: "Rp 28.500.000",
-      dp: "DP 8 jt-an",
-      features: ["Hotel bintang 4 dekat Masjidil Haram", "Pesawat Direct / 1x Transit", "City Tour Makkah & Madinah", "Muthawif berpengalaman"],
-      featured: false,
-    },
-    {
-      tag: "Paling Diminati",
-      title: "Umroh Plus Turki",
-      price: "Rp 36.900.000",
-      dp: "DP 8 jt-an",
-      features: ["12 Hari perjalanan berkah", "Hotel bintang 5 Makkah & Madinah", "Tour Istanbul 3 hari", "Manasik & perlengkapan lengkap"],
-      featured: true,
-    },
-    {
-      tag: "Haji Khusus",
-      title: "Haji Plus 2026",
-      price: "Mulai $11.500",
-      dp: "Akad syariah",
-      features: ["Kuota resmi Kemenag", "Hotel terdekat Masjidil Haram", "Bimbingan ustadz pembimbing", "Tenda VIP Mina & Arafah"],
-      featured: false,
-    },
-  ];
-
-  const keunggulan = [
-    { icon: "✓", title: "Resmi & Berizin", desc: "PPIU No. 04042300022560003 — terdaftar SISKO PATUH Kemenag RI." },
-    { icon: "☾", title: "Akad Syariah", desc: "Tanpa jaminan, tanpa riba. Semua proses sesuai prinsip syariah biar berkah." },
-    { icon: "✈", title: "Berangkat Pasti", desc: "Pembimbing berpengalaman, jadwal terjamin, dan layanan penuh sejak manasik." },
-    { icon: "♥", title: "Pelayanan Penuh Hati", desc: "Tim mendampingi jamaah mulai pendaftaran hingga kepulangan ke tanah air." },
-  ];
-
-  const faqs = [
-    { q: "Apa benar cukup bayar 8 juta langsung berangkat?", a: "Benar. Dengan skema cicilan tanpa jaminan, Anda cukup membayar DP sekitar 8 juta-an, berangkat ke Tanah Suci, lalu pelunasan dilakukan setelah pulang." },
-    { q: "Apakah PT Sultan Barokah Haramain sudah berizin resmi?", a: "Ya. Kami terdaftar resmi sebagai PPIU dengan No. Izin 04042300022560003 dan tergabung dalam SISKO PATUH Kemenag RI." },
-    { q: "Apa saja sistem pembayaran yang tersedia?", a: "Tersedia tiga skema: Cash, Tabungan bertahap, dan Cicilan Tanpa Jaminan dengan akad syariah." },
-    { q: "Apakah jamaah didampingi muthawif & pembimbing ibadah?", a: "Tentu. Setiap rombongan didampingi muthawif berpengalaman dan ustadz pembimbing manasik sejak di tanah air." },
-  ];
+  const paket = cms.packages;
+  const keunggulan = cms.advantages;
+  const faqs = cms.faqs.map((f) => ({ q: f.question, a: f.answer }));
+  const paymentMethods = cms.payment_methods;
+  const hero = (cms.settings.hero as any) ?? {};
+  const about = (cms.settings.about as any) ?? {};
+  const stats = ((cms.settings.stats as any) ?? []) as { n: string; l: string }[];
+  const galleryItems = cms.gallery.length > 0
+    ? cms.gallery.map((g) => g.image_url)
+    : [kaabaHero, jamaah, madinah, kaabaHero, jamaah, madinah, kaabaHero, jamaah];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -124,22 +102,20 @@ function Index() {
           <div className="lg:col-span-7 animate-fade-up">
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-card/60 px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-gold">
               <span className="size-1.5 rounded-full bg-gold animate-pulse-glow" />
-              Penyelenggara Resmi · Izin PPIU 04042300022560003
+              {hero.badge ?? "Penyelenggara Resmi · Izin PPIU 04042300022560003"}
             </div>
             <h1 className="mt-6 text-5xl md:text-7xl font-semibold leading-[1.05]">
-              Langkah Mudah Menuju
-              <span className="block text-gradient-gold italic">Baitullah.</span>
+              {hero.title_line1 ?? "Langkah Mudah Menuju"}
+              <span className="block text-gradient-gold italic">{hero.title_line2 ?? "Baitullah."}</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-xl">
-              PT Sultan Barokah Haramain — penyelenggara resmi Umroh & Haji dengan akad syariah.
-              Proses yang aman, amanah, dan terpercaya untuk perjalanan ibadah terbaikmu.
+              {hero.subtitle ?? "PT Sultan Barokah Haramain — penyelenggara resmi Umroh & Haji dengan akad syariah."}
             </p>
 
             <div className="mt-8 inline-block relative">
               <div className="absolute inset-0 bg-highlight rounded-2xl -rotate-1" />
               <div className="relative bg-highlight text-emerald-deep rounded-2xl px-6 py-4 font-bold text-lg md:text-xl">
-                Cukup bayar <span className="underline decoration-wavy">8 juta-an</span> langsung berangkat,
-                <br className="hidden md:block" /> pulangnya baru bayar.
+                {hero.highlight ?? "Cukup bayar 8 juta-an langsung berangkat, pulangnya baru bayar."}
               </div>
             </div>
 
@@ -159,11 +135,7 @@ function Index() {
             </div>
 
             <div className="mt-12 grid grid-cols-3 gap-6 max-w-md">
-              {[
-                { n: "1,200+", l: "Jamaah Berangkat" },
-                { n: "12+", l: "Tahun Pengalaman" },
-                { n: "100%", l: "Akad Syariah" },
-              ].map((s) => (
+              {stats.map((s) => (
                 <div key={s.l}>
                   <div className="text-3xl text-gradient-gold font-semibold">{s.n}</div>
                   <div className="text-xs text-muted-foreground mt-1">{s.l}</div>
@@ -317,12 +289,7 @@ function Index() {
               </div>
             </div>
             <div className="lg:col-span-7 grid sm:grid-cols-2 gap-5">
-              {[
-                { icon: "💵", title: "Cash", desc: "Pembayaran lunas di muka dengan harga terbaik dan bonus eksklusif." },
-                { icon: "🏦", title: "Tabungan", desc: "Menabung bertahap sesuai kemampuan hingga mencapai target keberangkatan." },
-                { icon: "✨", title: "Cicilan Tanpa Jaminan", desc: "Cukup bayar 8 juta-an, langsung berangkat. Pelunasan setelah pulang.", badge: "Favorit" },
-                { icon: "🤝", title: "Akad Syariah", desc: "Setiap transaksi disertai akad jelas dan transparan sesuai syariat Islam." },
-              ].map((c) => (
+              {paymentMethods.map((c) => (
                 <div key={c.title} className="group relative rounded-2xl border border-border bg-card p-6 hover:border-gold/50 transition-colors">
                   {c.badge && (
                     <div className="absolute top-4 right-4 rounded-full bg-highlight text-emerald-deep text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider">
@@ -331,7 +298,7 @@ function Index() {
                   )}
                   <div className="text-3xl">{c.icon}</div>
                   <div className="mt-4 font-semibold text-lg text-gold">{c.title}</div>
-                  <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{c.description}</p>
                 </div>
               ))}
             </div>
@@ -358,7 +325,7 @@ function Index() {
                   {k.icon}
                 </div>
                 <h3 className="mt-6 text-xl font-semibold">{k.title}</h3>
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{k.desc}</p>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{k.description}</p>
                 <div className="absolute top-6 right-6 text-5xl text-gold/10 group-hover:text-gold/20 transition-colors">
                   0{i + 1}
                 </div>
@@ -382,7 +349,7 @@ function Index() {
             </p>
           </div>
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[kaabaHero, jamaah, madinah, kaabaHero, jamaah, madinah, kaabaHero, jamaah].map((src, i) => (
+            {galleryItems.map((src, i) => (
               <div
                 key={i}
                 className={`relative overflow-hidden rounded-2xl border border-gold/20 group ${
