@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PT Sultan Barokah Haramain — Umroh & Haji Resmi Gresik" },
+      { title: "Perwakilan Resmi Sultan Haramain Gresik" },
       { name: "description", content: "Penyelenggara resmi Umroh & Haji. Cukup bayar 8 juta-an langsung berangkat, pulangnya baru bayar. Akad syariah, tanpa jaminan." },
       { name: "author", content: "PT Sultan Barokah Haramain" },
-      { property: "og:title", content: "PT Sultan Barokah Haramain — Umroh & Haji Resmi" },
-      { property: "og:description", content: "Langkah mudah menuju Baitullah. Cash, tabungan, atau cicilan tanpa jaminan." },
+      { property: "og:title", content: "Perwakilan Resmi Sultan Haramain Gresik" },
+      { property: "og:description", content: "Penyelenggara resmi Umroh & Haji. Cukup bayar 8 juta-an langsung berangkat, pulangnya baru bayar. Akad syariah, tanpa jaminan." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Perwakilan Resmi Sultan Haramain Gresik" },
+      { name: "twitter:description", content: "Penyelenggara resmi Umroh & Haji. Cukup bayar 8 juta-an langsung berangkat, pulangnya baru bayar. Akad syariah, tanpa jaminan." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/83f07fb3-70a5-45f5-9a67-268ee07a3cdd/id-preview-54e2d886--74300f78-c7a5-49f4-a8fd-db3a416b741a.lovable.app-1781080290273.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/83f07fb3-70a5-45f5-9a67-268ee07a3cdd/id-preview-54e2d886--74300f78-c7a5-49f4-a8fd-db3a416b741a.lovable.app-1781080290273.png" },
     ],
     links: [
       {
