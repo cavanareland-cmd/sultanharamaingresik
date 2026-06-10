@@ -102,22 +102,20 @@ function Index() {
           <div className="lg:col-span-7 animate-fade-up">
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-card/60 px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-gold">
               <span className="size-1.5 rounded-full bg-gold animate-pulse-glow" />
-              Penyelenggara Resmi · Izin PPIU 04042300022560003
+              {hero.badge ?? "Penyelenggara Resmi · Izin PPIU 04042300022560003"}
             </div>
             <h1 className="mt-6 text-5xl md:text-7xl font-semibold leading-[1.05]">
-              Langkah Mudah Menuju
-              <span className="block text-gradient-gold italic">Baitullah.</span>
+              {hero.title_line1 ?? "Langkah Mudah Menuju"}
+              <span className="block text-gradient-gold italic">{hero.title_line2 ?? "Baitullah."}</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-xl">
-              PT Sultan Barokah Haramain — penyelenggara resmi Umroh & Haji dengan akad syariah.
-              Proses yang aman, amanah, dan terpercaya untuk perjalanan ibadah terbaikmu.
+              {hero.subtitle ?? "PT Sultan Barokah Haramain — penyelenggara resmi Umroh & Haji dengan akad syariah."}
             </p>
 
             <div className="mt-8 inline-block relative">
               <div className="absolute inset-0 bg-highlight rounded-2xl -rotate-1" />
               <div className="relative bg-highlight text-emerald-deep rounded-2xl px-6 py-4 font-bold text-lg md:text-xl">
-                Cukup bayar <span className="underline decoration-wavy">8 juta-an</span> langsung berangkat,
-                <br className="hidden md:block" /> pulangnya baru bayar.
+                {hero.highlight ?? "Cukup bayar 8 juta-an langsung berangkat, pulangnya baru bayar."}
               </div>
             </div>
 
@@ -137,11 +135,7 @@ function Index() {
             </div>
 
             <div className="mt-12 grid grid-cols-3 gap-6 max-w-md">
-              {[
-                { n: "1,200+", l: "Jamaah Berangkat" },
-                { n: "12+", l: "Tahun Pengalaman" },
-                { n: "100%", l: "Akad Syariah" },
-              ].map((s) => (
+              {stats.map((s) => (
                 <div key={s.l}>
                   <div className="text-3xl text-gradient-gold font-semibold">{s.n}</div>
                   <div className="text-xs text-muted-foreground mt-1">{s.l}</div>
