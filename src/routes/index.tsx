@@ -295,12 +295,7 @@ function Index() {
               </div>
             </div>
             <div className="lg:col-span-7 grid sm:grid-cols-2 gap-5">
-              {[
-                { icon: "💵", title: "Cash", desc: "Pembayaran lunas di muka dengan harga terbaik dan bonus eksklusif." },
-                { icon: "🏦", title: "Tabungan", desc: "Menabung bertahap sesuai kemampuan hingga mencapai target keberangkatan." },
-                { icon: "✨", title: "Cicilan Tanpa Jaminan", desc: "Cukup bayar 8 juta-an, langsung berangkat. Pelunasan setelah pulang.", badge: "Favorit" },
-                { icon: "🤝", title: "Akad Syariah", desc: "Setiap transaksi disertai akad jelas dan transparan sesuai syariat Islam." },
-              ].map((c) => (
+              {paymentMethods.map((c) => (
                 <div key={c.title} className="group relative rounded-2xl border border-border bg-card p-6 hover:border-gold/50 transition-colors">
                   {c.badge && (
                     <div className="absolute top-4 right-4 rounded-full bg-highlight text-emerald-deep text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider">
@@ -309,7 +304,7 @@ function Index() {
                   )}
                   <div className="text-3xl">{c.icon}</div>
                   <div className="mt-4 font-semibold text-lg text-gold">{c.title}</div>
-                  <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{c.description}</p>
                 </div>
               ))}
             </div>
@@ -336,7 +331,7 @@ function Index() {
                   {k.icon}
                 </div>
                 <h3 className="mt-6 text-xl font-semibold">{k.title}</h3>
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{k.desc}</p>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{k.description}</p>
                 <div className="absolute top-6 right-6 text-5xl text-gold/10 group-hover:text-gold/20 transition-colors">
                   0{i + 1}
                 </div>
@@ -360,7 +355,7 @@ function Index() {
             </p>
           </div>
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[kaabaHero, jamaah, madinah, kaabaHero, jamaah, madinah, kaabaHero, jamaah].map((src, i) => (
+            {galleryItems.map((src, i) => (
               <div
                 key={i}
                 className={`relative overflow-hidden rounded-2xl border border-gold/20 group ${
