@@ -12,4 +12,8 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Deploy target: Vercel (Node serverless functions via nitro's vercel preset).
+  // The build emits a .vercel/output/ directory in the project root that Vercel
+  // picks up automatically — no extra Vercel build step needed.
+  nitro: { preset: "vercel" },
 });
